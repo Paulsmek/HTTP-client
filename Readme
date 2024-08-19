@@ -1,0 +1,44 @@
+    Programul incepe prin a citi permanent comenzile de la tastatura. Singura modalitate de a iesi din
+loop-ul de while este comanda exit. Citirea lucrurilor suplimentare se realizeaza in interiorul functiilor
+care se ocupa de fiecare comanda (TRIMIT_PRIMESC_SERVER = Creez payload-ul Json si pregatesc HTTP request-ul,
+deschid conexiune catre server, trimit si primesc mesajul de la acesta) : 
+
+- registerUser : citesc username si parola si verific daca au spatii in ele, lucru ce va fi tratat dupa
+trimitea requestului care server. TRIMIT_PRIMESC_SERVER. La finalul functiei ma ocup de ce response in functie
+de mesajul executiei : 200/201 Created, 400 Bad Request, 204 No Content, alte erori.
+
+- loginUser : citesc username si parola si nu mai verific daca au spatii in ele, deoarece serverul imi spune
+pentru login daca nu este bine. TRIMIT_PRIMESC_SERVER. La finalul functiei voi scoate si retine cookie-ul din
+response si ma ocup de alte erori : 400 Bad Request, 204 No Content, altele.
+
+- enterLibrary : verific daca am un cookie valid in urma unui login, returnand eroare in caz contrar.
+TRIMIT_PRIMESC_SERVER. Ca la login, voi scoate si retine token-ul dat in raspuns, iar in caz contrar eroarea
+este ca nu pot sa intru in biblioteca.
+
+- getBooks : verific daca am un token valid in urma enterLibrary, returnand eroare in caz contrar.
+TRIMIT_PRIMESC_SERVER. Urmeaza prelucrarea mesajului folosind o implementare proprie de parsare(detalii la final)
+Afisez din nou eroare in cazul in care raspunsul de la server nu contine 200 OK.
+
+- getBook : verific daca am un token valid in urma enterLibrary, returnand eroare in caz contrar. Citesc de la
+tastatura ID-ul cartii pe care doresc sa o afisez. TRIMIT_PRIMESC_SERVER. Urmeaza prelucrarea mesajului folosind
+o implementare proprie de parsare(detalii la final). Afisez din nou eroare in cazul in care raspunsul de la
+server nu contine 200 OK.
+
+- addBook : verific daca am un token valid in urma enterLibrary, returnand eroare in caz contrar. Citesc de la
+tastatura toate detaliile despre carte si verific daca unul dintre ele este lipsa, eroare tratata spre final.
+! Cu toate ca un test nu are unele fielduri, prima eroare primita este cea de numar de pagini prost deoarece se
+realizeaza inaintea celeilalte verificari. Daca primeam un numar de pagini valid, cealalta eroare este tratata !
+TRIMIT_PRIMESC_SERVER. La final prelucrez response-ul in functie de cazurile respective.
+
+- deleteBook : verific daca am un token valid in urma enterLibrary, returnand eroare in caz contrar. Citesc de la
+tastatura ID-ul cartii pe care doresc sa o sterg. TRIMIT_PRIMESC_SERVER. Urmeaza prelucrarea mesajului in funtie
+de cazurile respective.
+
+- logoutUser : verific daca am un cookie valid pentru a confirma faptul ca sunt logat si pot realiza delogarea.
+TRIMIT_PRIMESC_SERVER. Urmeaza prelucrarea mesajului in funtie de cazurile respective, iar in cazul de succes voi
+"sterge" cookie-ul de login si token-ul de biblioteca.
+
+    ! PARSAREA JSON ! : am realizat doua functii : parse_and_print_book_details() si parse_and_print_books() care sunt
+folosite la cele doua functii de afisare de carti. Am decis sa realizez eu parsarea pentru simplitudine. Pentru
+functia de afisare de books voi afisa toate cartile cu fieldurile ID si title. Pentru cea de book voi afisa toate
+detaliile cartii : ID, title, author, genre, publisher, page_count.
