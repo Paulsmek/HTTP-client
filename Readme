@@ -42,3 +42,5 @@ TRIMIT_PRIMESC_SERVER. Urmeaza prelucrarea mesajului in funtie de cazurile respe
 folosite la cele doua functii de afisare de carti. Am decis sa realizez eu parsarea pentru simplitudine. Pentru
 functia de afisare de books voi afisa toate cartile cu fieldurile ID si title. Pentru cea de book voi afisa toate
 detaliile cartii : ID, title, author, genre, publisher, page_count.
+
+https://pcom.pages.upb.ro/enunt-tema4/descriere.html
